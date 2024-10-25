@@ -14,6 +14,7 @@ struct SymTableNode {
 
 struct SymTable {
     struct SymTableNode* startNode;
+    size_t size; 
 };
 
 SymTable_T SymTable_new(void) {
@@ -23,6 +24,7 @@ SymTable_T SymTable_new(void) {
         return NULL;
     }
     symtable -> startNode = NULL;
+    symtable -> size = 0;
     return symtable;
 }
 
@@ -47,20 +49,7 @@ void SymTable_free(SymTable_T oSymTable) {
 }
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
-    struct SymTableNode* cur;
-    size_t size;
-    
-    assert (oSymTable != NULL);
-    
-    cur = oSymTable -> startNode;
-    size = 0;
-
-    while (cur != NULL) {
-        size++;
-        cur = cur -> nextNode;
-    }
-
-    return size;
+    return oSymTable -> size;
 }
 
 int SymTable_put(SymTable_T oSymTable,
@@ -70,6 +59,7 @@ int SymTable_put(SymTable_T oSymTable,
     struct SymTableNode* newNode;
 
     assert (oSymTable != NULL);
+    assert (pcKey != NULL);
 
     cur = oSymTable -> startNode;
     last = cur;
@@ -98,10 +88,11 @@ int SymTable_put(SymTable_T oSymTable,
     
     if (oSymTable -> startNode == NULL) {
         oSymTable -> startNode = newNode;
+        (oSymTable -> size)++;
         return 1;
     }
     last -> nextNode = newNode;
-    
+    (oSymTable -> size)++;
     return 1;
 
 }
@@ -111,6 +102,8 @@ void *SymTable_replace(SymTable_T oSymTable,
     struct SymTableNode* cur;
 
     assert (oSymTable != NULL);
+    assert (pcKey != NULL);
+
 
     cur = oSymTable -> startNode;
 
@@ -127,6 +120,7 @@ void *SymTable_replace(SymTable_T oSymTable,
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode* cur;
+    assert (pcKey != NULL);
 
     assert (oSymTable != NULL);
 
@@ -143,6 +137,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode* cur;
+    assert (pcKey != NULL);
 
     assert (oSymTable != NULL);
 
@@ -163,6 +158,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     void* returnVal;
 
     assert (oSymTable != NULL);
+    assert (pcKey != NULL);
 
     cur = oSymTable -> startNode;
     last = NULL;
@@ -170,6 +166,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
 
     while (cur != NULL) {
         if (strcmp(cur -> key, pcKey) == 0) {
+            (oSymTable -> size)--;
             returnVal = (void*) cur -> value;
             free(cur -> key); 
             if (last == NULL) {
@@ -183,6 +180,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
         last = cur;
         cur = cur -> nextNode;
     }
+
+
     return NULL;
 }
 
@@ -192,6 +191,7 @@ void SymTable_map(SymTable_T oSymTable,
     struct SymTableNode* cur;
 
     assert (oSymTable != NULL);
+    assert (pfApply != NULL);
 
     cur = oSymTable -> startNode;
 
