@@ -1,3 +1,4 @@
+#include <stddef.h>
 #ifndef SYMTABLE_INCLUDED
 #define SYMTABLE_INCLUDED
 
