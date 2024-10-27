@@ -1,4 +1,7 @@
-/* TODO: CHECK IMPORTS*/
+/*--------------------------------------------------------------------*/
+/* symtablelist.c                                                     */
+/* Author: Aaron Yang                                                 */
+/*--------------------------------------------------------------------*/
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -7,8 +10,13 @@
 #include "symtable.h"
 
 struct SymTableNode {
+    /* String representing the binding's key */
     char* key;
+
+    /* Void pointer to the binding's value */
     const void* value;
+
+    /* Pointer to the next binding in the SymTable */
     struct SymTableNode* nextNode;
 };
 
