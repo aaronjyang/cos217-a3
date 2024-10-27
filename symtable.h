@@ -7,6 +7,7 @@
 #ifndef SYMTABLE_INCLUDED
 #define SYMTABLE_INCLUDED
 
+/**/
 typedef struct SymTable* SymTable_T;
 
 /* Creates new SymTable object and returns a pointer to the created 
