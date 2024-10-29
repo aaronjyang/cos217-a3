@@ -9,6 +9,8 @@
 #include <stddef.h>
 #include "symtable.h"
 
+/* Struct representing a key-value binding in a SymTable along with the 
+   next binding in the corresponding linked list */
 struct SymTableNode {
     /* String representing the binding's key */
     char* key;
@@ -20,15 +22,21 @@ struct SymTableNode {
     struct SymTableNode* nextNode;
 };
 
+/* Struct representing a SymTable. Stores start nodes for each bucket,
+   number of buckets, and number of bindings entered */
 struct SymTable {
+    /* Array of start nodes (one for each bucket)*/
     struct SymTableNode** startNodes;
+
+    /* Total number of buckets in the SymTable */
     size_t numBuckets;
+
+    /* Total number of key-value bindings in the SymTable*/
     size_t size; 
 };
 
 /* Return a hash code for pcKey that is between 0 and uBucketCount-1,
    inclusive. */
-
 static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 {
     const size_t HASH_MULTIPLIER = 65599;
@@ -44,24 +52,25 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 }
 
 SymTable_T SymTable_new(void) {
+    const size_t DEFAULT_BUCKETS = 509;
     SymTable_T symtable;
-    int i;
+    size_t i;
     symtable = (SymTable_T) malloc(sizeof(struct SymTable));
     if (symtable == NULL) {
         return NULL;
     }
     
-    symtable -> startNodes = (struct SymTableNode**) calloc(509, sizeof(struct SymTableNode *));
+    symtable -> startNodes = (struct SymTableNode**) calloc(DEFAULT_BUCKETS, sizeof(struct SymTableNode *));
 
     if (symtable -> startNodes == NULL) {
         return NULL;
     }
-    for (i = 0; i < 509; i++) {
+    for (i = 0; i < DEFAULT_BUCKETS; i++) {
         (symtable -> startNodes)[i] = NULL;
     }
 
     symtable -> size = 0;
-    symtable -> numBuckets = 509;
+    symtable -> numBuckets = DEFAULT_BUCKETS;
     return symtable;
 }
 

@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include "symtable.h"
 
+/* Struct representing a single key-value binding in a SymTable */
 struct SymTableNode {
     /* String representing the binding's key */
     char* key;
@@ -20,19 +21,26 @@ struct SymTableNode {
     struct SymTableNode* nextNode;
 };
 
+/* Struct representing a SymTable represented as a linked list */
 struct SymTable {
+    /* First node of the SymTable linked list */
     struct SymTableNode* startNode;
+
+    /* Number of bindings in the SymTable */
     size_t size; 
 };
 
 SymTable_T SymTable_new(void) {
     SymTable_T symtable;
     symtable = (SymTable_T) malloc(sizeof(struct SymTable));
+
     if (symtable == NULL) {
         return NULL;
     }
+
     symtable -> startNode = NULL;
     symtable -> size = 0;
+    
     return symtable;
 }
 
